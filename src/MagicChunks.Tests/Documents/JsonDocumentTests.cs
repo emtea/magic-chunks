@@ -286,6 +286,48 @@ namespace MagicChunks.Tests.Documents
         }
 
         [Fact]
+        public void TransformByIndex2()
+        {
+            // Arrange
+
+            var document = new JsonDocument(@"[
+        { 'i': 0, data: 'AA' },
+        { 'i': 1, data: 'BB' },
+        { 'i': 2, data: 'CC' },
+        { 'i': 3, data: 'DD' },
+    ]");
+
+
+            // Act
+
+            document.ReplaceKey(new[] { "magicArray[2]", "data" }, "AA");
+
+            var result = document.ToString();
+
+
+            // Assert
+            string testString = @"[
+  {
+    ""i"": 0,
+    ""data"": ""AA""
+  },
+  {
+    ""i"": 1,
+    ""data"": ""BB""
+  },
+  {
+    ""i"": 2,
+    ""data"": ""AA""
+  },
+  {
+    ""i"": 3,
+    ""data"": ""DD""
+  }
+]";
+            Assert.Equal(testString, result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
         public void TransformByNodeValue()
         {
             // Arrange

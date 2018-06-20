@@ -20,7 +20,17 @@ namespace MagicChunks.Documents
         {
             try
             {
-                Document = (JObject)JsonConvert.DeserializeObject(source);
+                var result = JsonConvert.DeserializeObject(source);
+                if (result is JArray)
+                {
+                    Document = new JObject();
+                    Document.Add("magicArray", ((JArray)result));
+
+                }
+                else
+                {
+                    Document = (JObject)result;
+                }
             }
             catch (JsonReaderException ex)
             {
@@ -179,6 +189,10 @@ namespace MagicChunks.Documents
 
         public override string ToString()
         {
+            if(Document?.Property("magicArray") != null)
+            {
+                return Document.Property("magicArray").Value?.ToString() ?? String.Empty;
+            }
             return Document?.ToString() ?? String.Empty;
         }
 
